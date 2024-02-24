@@ -13,10 +13,11 @@ In this project, we use PSO to optimize the hyperparameters of various machine l
 
 ## Usage
 
-1. Install the library:
+1. Install the `pso-optimizer` library:
 
+```bash
 pip install pso-optimizer
-
+```
 2. Example usage is in main.py file.
 
 Files
