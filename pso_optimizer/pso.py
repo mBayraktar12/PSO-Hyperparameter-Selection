@@ -1,9 +1,8 @@
 import numpy as np
 from joblib import Parallel, delayed
-from sklearn.ensemble import AdaBoostClassifier, RandomForestClassifier
+from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score, classification_report, precision_score
 from sklearn.model_selection import train_test_split
-from sklearn.naive_bayes import GaussianNB
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.svm import SVC
 from sklearn.tree import DecisionTreeClassifier
@@ -65,12 +64,12 @@ class PSOOptimizer:
         # PSO optimization loop
         for _ in range(num_iterations):
             fitness = Parallel(n_jobs=num_jobs)(
-                delayed(self.evaluate_fitness)(self.estimator, X_train, X_test, y_train, y_test, particle)
+                delayed(self.evaluate_fitness)(X_train, X_test, y_train, y_test, particle)
                 for particle in population
             )
 
             for j, particle in enumerate(population):
-                if fitness[j] > self.evaluate_fitness(self.estimator, X_train, X_test, y_train, y_test, best_position[j]):
+                if fitness[j] > self.evaluate_fitness(X_train, X_test, y_train, y_test, best_position[j]):
                     best_position[j] = particle
 
             if max(fitness) > global_best_fitness:
@@ -281,3 +280,4 @@ class PSOOptimizer:
             }
         else:
             raise ValueError("Estimator not supported.")
+        return hyperparameter_space
