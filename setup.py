@@ -13,5 +13,5 @@ setup(
     author='Mert Bayraktar',
     author_email='mertbayraktar07@outlook.com',
     description='Hyperparameter selection on machine learning models using PSO algorithm.',
-    url=''
+    url='https://github.com/mBayraktar12/PSO-Hyperparameter-Selection'
 )
