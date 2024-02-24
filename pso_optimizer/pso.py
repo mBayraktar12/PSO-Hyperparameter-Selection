@@ -190,3 +190,45 @@ def evaluate_fitness(estimator, X_train, X_test, y_train, y_test, hyperparameter
     accuracy_pso = accuracy_score(y_test, y_pred)
     # report = classification_report(y_test, y_pred)
     return accuracy_pso
+
+
+def evaluate_model(estimator, best_hyperparameters):
+
+    if estimator == "KNN":
+
+        print("Optimal hyperparameters:")
+        print(f"K: {best_hyperparameters[0]}")
+        print(f"Distance Metric: {distance_metric_map[best_hyperparameters[1]]}")
+        print(f"Weighting Method: {weighting_method_map[best_hyperparameters[2]]}")
+        print(f"Algorithm: {algorithm_map[best_hyperparameters[3]]}")
+        print(f"Leaf Size: {best_hyperparameters[4]}")
+        print(f"P Value: {best_hyperparameters[5]}")
+
+    elif estimator == "RF":
+        print("Optimal hyperparameters:")
+        print(f"n_estimators_value: {best_hyperparameters[0]}")
+        print(f"max_depth_value: {best_hyperparameters[1]}")
+        print(f"Criterion: {criterion_map_rf[best_hyperparameters[2]]}")
+        print(f"min_samples_split_values: {min_samples_split_map_rf[best_hyperparameters[3]]}")
+        print(f"min_samples_leaf_values: {best_hyperparameters[4]}")
+        print(f"min_weight_fraction_leaf_values: {best_hyperparameters[5]}")
+        print(f"max_features_values: {max_features_map_rf[best_hyperparameters[6]]}")
+    
+    elif estimator == "DT":
+        print("Optimal hyperparameters:")
+        print(f"Splitter: {splitter_map[best_hyperparameters[0]]}")
+        print(f"max_depth_value: {best_hyperparameters[1]}")
+        print(f"Criterion: {criterion_map_dt[best_hyperparameters[2]]}")
+        print(f"min_samples_split_values: {min_samples_split_map_dt[best_hyperparameters[3]]}")
+        print(f"min_samples_leaf_values: {best_hyperparameters[4]}")
+        print(f"min_weight_fraction_leaf_values: {best_hyperparameters[5]}")
+        print(f"max_features_values: {max_features_map_dt[best_hyperparameters[6]]}")
+
+    elif estimator == "SVC":
+        print("Optimal hyperparameters:")
+        print(f"C: {[best_hyperparameters[0]]}")
+        print(f"Kernel: {kernel_map[best_hyperparameters[1]]}")
+        print(f"Degree: {best_hyperparameters[2]}")
+        print(f"Gamma: {gamma_map[best_hyperparameters[3]]}")
+        print(f"Shrinking: {shrinking_map[best_hyperparameters[4]]}")
+        print(f"Decision Function Shape: {decision_function_shape_map[best_hyperparameters[5]]}")
