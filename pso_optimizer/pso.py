@@ -1,7 +1,7 @@
 import numpy as np
 from joblib import Parallel, delayed
 from sklearn.ensemble import AdaBoostClassifier, RandomForestClassifier
-from sklearn.metrics import accuracy_score, classification_report
+from sklearn.metrics import accuracy_score, classification_report, precision_score
 from sklearn.model_selection import train_test_split
 from sklearn.naive_bayes import GaussianNB
 from sklearn.neighbors import KNeighborsClassifier
@@ -232,3 +232,46 @@ def get_hyperparameters(estimator, best_hyperparameters):
         print(f"Gamma: {gamma_map[best_hyperparameters[3]]}")
         print(f"Shrinking: {shrinking_map[best_hyperparameters[4]]}")
         print(f"Decision Function Shape: {decision_function_shape_map[best_hyperparameters[5]]}")
+    
+    else:
+        raise ValueError("Estimator not supported")
+
+def get_report(estimator, X_train, X_test, y_train, y_test, best_hyperparameters):
+
+    estimator_instance = None
+    if estimator == "KNN":
+        k, distance_metric, weighting_method, algorithm, leaf_size, p_val = best_hyperparameters
+        estimator_instance = KNeighborsClassifier(n_neighbors=int(k), metric=distance_metric_map[round(distance_metric)],
+                                                  weights=weighting_method_map[round(weighting_method)],
+                                                  algorithm=algorithm_map[round(algorithm)],
+                                                  leaf_size=int(leaf_size), p=int(p_val))
+    elif estimator == "RF":
+        n_estimators_values, max_depth_values, criterion_values, min_samples_split_values, min_samples_leaf_values, min_weight_fraction_leaf_values, max_features_values = best_hyperparameters
+        estimator_instance = RandomForestClassifier(n_estimators=int(n_estimators_values), max_depth=int(max_depth_values),
+                                                     criterion=criterion_map_rf[round(criterion_values)], 
+                                                     min_samples_split= min_samples_split_map_rf[round(min_samples_split_values)],
+                                                     min_samples_leaf=int(min_samples_leaf_values),
+                                                      min_weight_fraction_leaf = min_weight_fraction_leaf_values,
+                                                       max_features=max_features_map_rf[round(max_features_values)]
+                                                    )
+
+    elif estimator == "DT":
+        splitter_values, max_depth_values, criterion_values, min_samples_split_values, min_samples_leaf_values, min_weight_fraction_leaf_values, max_features_values = best_hyperparameters
+        estimator_instance = DecisionTreeClassifier(splitter=splitter_map[round(splitter_values)], max_depth=int(max_depth_values),
+                                                    criterion=criterion_map_dt[round(criterion_values)],min_samples_split=min_samples_split_map_dt[round(min_samples_split_values)],
+                                                    min_samples_leaf=int(min_samples_leaf_values), 
+                                                    min_weight_fraction_leaf=min_weight_fraction_leaf_values, max_features=max_features_map_dt[round(max_features_values)])
+    elif estimator == "SVC":
+        c, kernel_values, degree_values, gamma_values, shrinking_values, decision_function_shape_values = best_hyperparameters
+        estimator_instance = SVC(C=int(c), kernel=kernel_map[round(kernel_values)],
+                                 degree=int(degree_values), shrinking=shrinking_map[round(shrinking_values)], gamma=gamma_map[round(gamma_values)],
+                                 decision_function_shape=decision_function_shape_map[round(decision_function_shape_values)])
+    else:
+        raise ValueError("Estimator not supported.")
+
+    estimator_instance.fit(X_train, y_train)
+    y_pred = estimator_instance.predict(X_test)
+    # accuracy_pso = accuracy_score(y_test, y_pred)
+    report = classification_report(y_test, y_pred)
+    return report    
+
