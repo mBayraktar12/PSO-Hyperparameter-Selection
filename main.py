@@ -10,7 +10,7 @@ X = load_digits.data
 y = load_digits.target
 
 # Split dataset into train and test sets
-optimizer = PSOOptimizer(estimator="DT")
+optimizer = PSOOptimizer(estimator="KNN")
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
 # Example usage with KNN estimator
