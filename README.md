@@ -13,16 +13,11 @@ In this project, we use PSO to optimize the hyperparameters of various machine l
 
 ## Usage
 
-1. Clone the repository:
+1. Install the library:
 
-```bash
-git clone https://github.com/your_username/your_repository.git
+pip install pso-optimizer
 
-2. Install the required Python packages:
-
-pip install numpy joblib scikit-learn tqdm
-
-3. Example usage is in main.py file.
+2. Example usage is in main.py file.
 
 Files
 * `main.py`: The main script to run PSO hyperparameter optimization.

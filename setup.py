@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 
 setup(
-    name='pso_selection',
+    name='pso_optimizer',
     version='1.0.0',
     packages=find_packages(),
     install_requires=[
