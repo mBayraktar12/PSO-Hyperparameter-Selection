@@ -192,7 +192,7 @@ def evaluate_fitness(estimator, X_train, X_test, y_train, y_test, hyperparameter
     return accuracy_pso
 
 
-def evaluate_model(estimator, best_hyperparameters):
+def get_hyperparameters(estimator, best_hyperparameters):
 
     if estimator == "KNN":
 

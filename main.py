@@ -17,7 +17,7 @@ best_hyperparameters, best_score = pso.pso_hyperparameter_optimization(estimator
 
 print(f"Best Score: {best_score}")
 
-pso.evaluate_model(estimator="DT", best_hyperparameters=best_hyperparameters)
+pso.get_hyperparameters(estimator="DT", best_hyperparameters=best_hyperparameters)
 
 
 
