@@ -27,8 +27,10 @@ class PSOOptimizer:
 
     def __init__(self, estimator):
         self.estimator = estimator
+        print("\n*** Default Values for PSO Optimization ***")
+        print(f"The default value for c1 and c2 is 2.05, and for w is 0.72894 according to the paper 'The Particle Swarm — Explosion, Stability, and Convergence in a Multidimensional Complex Space' by Clerc and Kennedy.\n")
 
-    def pso_hyperparameter_optimization(self, X_train, X_test, y_train, y_test, num_particles, num_iterations, c1, c2, num_jobs=-1):
+    def pso_hyperparameter_optimization(self, X_train, X_test, y_train, y_test, num_particles, num_iterations, c1 = 2.05, c2 = 2.05, num_jobs=-1, w=0.72984):
         """
         Perform hyperparameter optimization using Particle Swarm Optimization (PSO).
 
@@ -38,12 +40,14 @@ class PSOOptimizer:
             - target_column_index: Index of the target column in the dataset.
             - num_particles: Number of particles in the population.
             - num_iterations: Number of iterations for the PSO algorithm.
-            - c1: Acceleration constant.
-            - c2: Acceleration constant.
+            - c1: Acceleration constant. Default value is c1 = 2.05
+            - c2: Acceleration constant. Default value is c2 = 2.05
             - num_jobs: Number of parallel jobs for fitness evaluation.
+            - inertia weight: Inertia constant. Default value is w=0.72984 according to the paper by M. Clerc and J. Kennedy
 
         Returns:
             - global_best_position: The best set of hyperparameters found.
+            - global_best_fitness: The best accuracy found.
         """
         hyperparameter_space = self._get_hyperparameter_space()
 
@@ -79,7 +83,7 @@ class PSOOptimizer:
             for j, particle in enumerate(population):
                 r1 = np.random.uniform(0, 1)
                 r2 = np.random.uniform(0, 1)
-                velocity[j] = [velocity[j][k] + c1 * r1 * (best_position[j][k] - particle[k]) + c2 * r2 * (global_best_position[k] - particle[k]) for k in range(len(hyperparameter_space))]
+                velocity[j] = [w * velocity[j][k] + c1 * r1 * (best_position[j][k] - particle[k]) + c2 * r2 * (global_best_position[k] - particle[k]) for k in range(len(hyperparameter_space))]
 
                 for k in range(len(hyperparameter_space)):
                     particle[k] += velocity[j][k]
@@ -91,12 +95,18 @@ class PSOOptimizer:
             # Update progress bar
             progress_bar.update(1)
 
+            w = self.update_inertia_weight(w, c1, c2)
+
         # Close progress bar
         progress_bar.close()
 
         return global_best_position, global_best_fitness
 
-
+    def update_inertia_weight(self, w, c1, c2):
+        phi = c1 + c2
+        # return w - 0.01 # Linear decay
+        return 2 / (abs(2 - phi - np.sqrt((phi**2) - (4 * phi))))
+    
     def evaluate_fitness(self, X_train, X_test, y_train, y_test, hyperparameters):
         """
         Evaluate the fitness of a set of hyperparameters.

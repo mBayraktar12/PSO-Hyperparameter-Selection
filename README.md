@@ -1,6 +1,6 @@
 # Particle Swarm Optimization (PSO) Hyperparameter Optimization
 
-This project demonstrates the use of Particle Swarm Optimization (PSO) for hyperparameter optimization of machine learning models.
+This project demonstrates the use of Particle Swarm Optimization (PSO) for hyperparameter optimization of machine learning models in classification task.
 
 ## Introduction
 
