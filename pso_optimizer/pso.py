@@ -25,8 +25,13 @@ from pso_optimizer.hyperparameter_mappings import (kernel_map,
 
 class PSOOptimizer:
 
-    def __init__(self, estimator):
+    def __init__(self, estimator, random_state, random_seed):
         self.estimator = estimator
+        self.random_state = random_state
+        self.random_seed = random_seed
+        if self.random_seed is not None:
+            np.random.seed(self.random_seed)
+
         print("\n*** Default Values for PSO Optimization ***")
         print(f"The default value for c1 and c2 is 2.05, and for w is 0.72894 according to the paper 'The Particle Swarm — Explosion, Stability, and Convergence in a Multidimensional Complex Space' by Clerc and Kennedy.\n")
 
@@ -49,6 +54,8 @@ class PSOOptimizer:
             - global_best_position: The best set of hyperparameters found.
             - global_best_fitness: The best accuracy found.
         """
+        if self.random_seed is not None:
+            np.random.seed(self.random_seed)
         hyperparameter_space = self._get_hyperparameter_space()
 
         progress_bar = tqdm(total=num_iterations, desc="PSO Progress")
@@ -141,7 +148,7 @@ class PSOOptimizer:
                                                     leaf_size=int(leaf_size), p=int(p_val))
         elif self.estimator == "RF":
             n_estimators_values, max_depth_values, criterion_values, min_samples_split_values, min_samples_leaf_values, min_weight_fraction_leaf_values, max_features_values = hyperparameters
-            estimator_instance = RandomForestClassifier(n_estimators=int(n_estimators_values), max_depth=int(max_depth_values),
+            estimator_instance = RandomForestClassifier(random_state = self.random_state, n_estimators=int(n_estimators_values), max_depth=int(max_depth_values),
                                                         criterion=criterion_map_rf[round(criterion_values)], 
                                                         min_samples_split= min_samples_split_map_rf[round(min_samples_split_values)],
                                                         min_samples_leaf=int(min_samples_leaf_values),
@@ -151,13 +158,13 @@ class PSOOptimizer:
 
         elif self.estimator == "DT":
             splitter_values, max_depth_values, criterion_values, min_samples_split_values, min_samples_leaf_values, min_weight_fraction_leaf_values, max_features_values = hyperparameters
-            estimator_instance = DecisionTreeClassifier(splitter=splitter_map[round(splitter_values)], max_depth=int(max_depth_values),
+            estimator_instance = DecisionTreeClassifier(random_state = self.random_state, splitter=splitter_map[round(splitter_values)], max_depth=int(max_depth_values),
                                                         criterion=criterion_map_dt[round(criterion_values)],min_samples_split=min_samples_split_map_dt[round(min_samples_split_values)],
                                                         min_samples_leaf=int(min_samples_leaf_values), 
                                                         min_weight_fraction_leaf=min_weight_fraction_leaf_values, max_features=max_features_map_dt[round(max_features_values)])
         elif self.estimator == "SVC":
             c, kernel_values, degree_values, gamma_values, shrinking_values, decision_function_shape_values = hyperparameters
-            estimator_instance = SVC(C=int(c), kernel=kernel_map[round(kernel_values)],
+            estimator_instance = SVC(random_state = self.random_state, C=int(c), kernel=kernel_map[round(kernel_values)],
                                     degree=int(degree_values), shrinking=shrinking_map[round(shrinking_values)], gamma=gamma_map[round(gamma_values)],
                                     decision_function_shape=decision_function_shape_map[round(decision_function_shape_values)])
         else:
@@ -219,7 +226,7 @@ class PSOOptimizer:
                                                     leaf_size=int(leaf_size), p=int(p_val))
         elif self.estimator == "RF":
             n_estimators_values, max_depth_values, criterion_values, min_samples_split_values, min_samples_leaf_values, min_weight_fraction_leaf_values, max_features_values = best_hyperparameters
-            estimator_instance = RandomForestClassifier(n_estimators=int(n_estimators_values), max_depth=int(max_depth_values),
+            estimator_instance = RandomForestClassifier(random_state = self.random_state, n_estimators=int(n_estimators_values), max_depth=int(max_depth_values),
                                                         criterion=criterion_map_rf[round(criterion_values)], 
                                                         min_samples_split= min_samples_split_map_rf[round(min_samples_split_values)],
                                                         min_samples_leaf=int(min_samples_leaf_values),
@@ -229,13 +236,13 @@ class PSOOptimizer:
 
         elif self.estimator == "DT":
             splitter_values, max_depth_values, criterion_values, min_samples_split_values, min_samples_leaf_values, min_weight_fraction_leaf_values, max_features_values = best_hyperparameters
-            estimator_instance = DecisionTreeClassifier(splitter=splitter_map[round(splitter_values)], max_depth=int(max_depth_values),
+            estimator_instance = DecisionTreeClassifier(random_state = self.random_state, splitter=splitter_map[round(splitter_values)], max_depth=int(max_depth_values),
                                                         criterion=criterion_map_dt[round(criterion_values)],min_samples_split=min_samples_split_map_dt[round(min_samples_split_values)],
                                                         min_samples_leaf=int(min_samples_leaf_values), 
                                                         min_weight_fraction_leaf=min_weight_fraction_leaf_values, max_features=max_features_map_dt[round(max_features_values)])
         elif self.estimator == "SVC":
             c, kernel_values, degree_values, gamma_values, shrinking_values, decision_function_shape_values = best_hyperparameters
-            estimator_instance = SVC(C=int(c), kernel=kernel_map[round(kernel_values)],
+            estimator_instance = SVC(random_state = self.random_state, C=int(c), kernel=kernel_map[round(kernel_values)],
                                     degree=int(degree_values), shrinking=shrinking_map[round(shrinking_values)], gamma=gamma_map[round(gamma_values)],
                                     decision_function_shape=decision_function_shape_map[round(decision_function_shape_values)])
         else:
