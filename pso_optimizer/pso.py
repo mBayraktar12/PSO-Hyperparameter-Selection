@@ -102,17 +102,16 @@ class PSOOptimizer:
             # Update progress bar
             progress_bar.update(1)
 
-            w = self.update_inertia_weight(w, c1, c2)
+            # w = self.update_inertia_weight(w=w)
 
         # Close progress bar
         progress_bar.close()
 
         return global_best_position, global_best_fitness
 
-    def update_inertia_weight(self, w, c1, c2):
-        phi = c1 + c2
-        # return w - 0.01 # Linear decay
-        return 2 / (abs(2 - phi - np.sqrt((phi**2) - (4 * phi))))
+    # def update_inertia_weight(self, w):
+
+    #     return w - 0.01 # Linear decay
     
     def evaluate_fitness(self, X_train, X_test, y_train, y_test, hyperparameters):
         """
