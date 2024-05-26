@@ -40,3 +40,15 @@ Files
 ## Acknowledgments
 
 The implementation of PSO hyperparameter optimization is inspired by the paper "The Particle Swarm — Explosion, Stability, and Convergence in a Multidimensional Complex Space" by Clerc and Kennedy.
+
+## Citation
+
+If you use this package in your work, please cite it using the following information:
+@software{pso_optimizer,
+  author       = {Mert Bayraktar},
+  year         = {2024},
+  publisher    = {GitHub},
+  journal      = {GitHub repository},
+  howpublished = {\url{https://github.com/mBayraktar12/PSO-Hyperparameter-Selection/tree/main}},
+  version      = {1.0.0}
+}
